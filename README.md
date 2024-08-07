@@ -1,4 +1,4 @@
-# H1Web Server
+# Web Server
 
 This project implements a multi-threaded web server in C++98 that supports both HTTP and HTTPS. The server reads configuration from a JSON file and uses a time-expiry cache to serve files efficiently. Detailed logging is implemented using a producer-consumer pattern.
 Features
@@ -9,7 +9,7 @@ Features
 4. In-memory cache with TTL (time-to-live) for cached items.
 5. Detailed logging of server actions and client requests.
 
-# H2 Project Structure
+# Project Structure
 
     include/: Header files for various modules.
     src/: Source files for various modules.
@@ -19,21 +19,21 @@ Features
     logs/: Log files.
     content/: Directory for content to be served.
 
-# H3 Modules
-# H4Server Module
+# Modules
+# Server Module
 
 Handles incoming client connections, dispatches them to worker threads, and processes HTTP/HTTPS requests.
 Logger Module
-# H4 Logger Module
+# Logger Module
 Implements logging using a producer-consumer pattern. Logs are written to files in the background by a separate thread.
 
-# H4 Cache Module
+# Cache Module
 Implements an in-memory cache with time-to-live (TTL) for cached items. Supports fetching files and caching them in chunks.
 
-# H4 Socket Module
+#Socket Module
 Provides an abstraction for TCP and SSL sockets, using the Bridge design pattern to support both types of connections.
 
- # H4 Config Manager Module
+Config Manager Module
 
 Reads configuration from a JSON file and provides configuration parameters to other modules. Implemented as a singleton.
 Compilation and Running Instructions
@@ -43,17 +43,17 @@ Prerequisites
     OpenSSL library for HTTPS support.
     jsoncpp library for JSON parsing.
 
-# H3 Compilation
+# Compilation
     cd mainstreaming
     make
     ./bin/server config.json 
-# H3 Clone the repository:
+# Clone the repository:
 
     sh
     https://github.com/andi-ra/mainstreaming.git
     cd mainstreaming
 
-# H3 Configuration
+# Configuration
 
 Edit the config/config.json file to set the following parameters:
 
