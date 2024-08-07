@@ -1,0 +1,8 @@
+{
+    "port": 8080,
+    "cache_ttl": 3600,
+    "content_path": "./content",
+    "certs_path": "./certs/server.crt",
+    "key_path": "./certs/server.key",
+    "log_path": "./logs"
+}

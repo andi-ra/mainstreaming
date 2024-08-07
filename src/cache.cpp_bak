@@ -1,0 +1,53 @@
+#include "cache.h"
+#include "logger.h"
+#include <stdlib.h>
+#include <string.h>
+
+Cache& Cache::getInstance() {
+    static Cache instance;
+    return instance;
+}
+
+Cache::Cache() {
+    pthread_mutex_init(&cacheMutex, NULL);
+}
+
+void Cache::init(int ttl) {
+    this->ttl = ttl;
+    Logger::getInstance().log("Cache initialized");
+}
+
+const char* Cache::get(const char* key) {
+    pthread_mutex_lock(&cacheMutex);
+    std::map<std::string, CacheEntry*>::iterator it = cache.find(key);
+    if (it != cache.end() && it->second->expireTime > time(NULL)) {
+        Logger::getInstance().log("Cache hit");
+        pthread_mutex_unlock(&cacheMutex);
+        return it->second->data;
+    }
+    Logger::getInstance().log("Cache miss");
+    pthread_mutex_unlock(&cacheMutex);
+    return NULL;
+}
+
+void Cache::put(const char* key, const char* data) {
+    pthread_mutex_lock(&cacheMutex);
+    CacheEntry* entry = new CacheEntry;
+    entry->data = strdup(data);
+    entry->expireTime = time(NULL) + ttl;
+    cache[key] = entry;
+    Logger::getInstance().log("Cache put");
+    pthread_mutex_unlock(&cacheMutex);
+}
+
+void Cache::expire(const char* key) {
+    pthread_mutex_lock(&cacheMutex);
+    std::map<std::string, CacheEntry*>::iterator it = cache.find(key);
+    if (it != cache.end()) {
+        free(it->second->data);
+        delete it->second;
+        cache.erase(it);
+        Logger::getInstance().log("Cache entry expired");
+    }
+    pthread_mutex_unlock(&cacheMutex);
+}
